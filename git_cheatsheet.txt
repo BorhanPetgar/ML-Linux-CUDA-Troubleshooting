@@ -1,0 +1,452 @@
+git Cheatsheet - Comprehensive Commands and Examples
+
+# This cheatsheet provides an extensive reference for frequently used and some advanced Git commands.
+# It covers repository setup, staging, committing, branching, merging, rebasing,
+# remote operations, stashing, tagging, history inspection, and more.
+
+# --- Configuration ---
+# Set your user name and email for commits. These are global settings.
+# Example:
+git config --global user.name "Your Name"
+git config --global user.email "your.email@example.com"
+
+# Check your Git configuration.
+# Example:
+git config --list
+# Check a specific configuration setting:
+# Example:
+git config user.name
+
+# Open the global Git configuration file in your default text editor.
+# Example:
+git config --global --edit
+
+# --- Initializing a Repository ---
+# Initialize a new Git repository in the current directory.
+# Example:
+git init
+
+# Clone an existing repository from a URL. This creates a new directory.
+# Example:
+git clone https://github.com/user/repo.git
+git clone git@github.com:user/repo.git my-local-repo-name
+
+# --- Staging and Committing ---
+# Check the status of your working directory and staging area.
+# Example:
+git status
+# Show status in a short format:
+# Example:
+git status -s
+
+# Add changes to the staging area.
+# Add a specific file:
+# Example:
+git add index.html
+# Add all changes in the current directory (new, modified, deleted files, but not untracked directories):
+# Example:
+git add .
+# Add all changes across the repository (including deleted files and untracked directories):
+# Example:
+git add -A
+# Add changes interactively (allows selecting specific hunks/lines):
+# Example:
+git add -p
+
+# Commit staged changes with a message.
+# Example:
+git commit -m "Initial commit"
+# Commit staged changes and open a text editor for the message:
+# Example:
+git commit
+# Commit all tracked changes directly (skipping the staging area for modified/deleted files, but not new untracked files).
+# Example:
+git commit -am "Update existing feature"
+# Amend the last commit (change message, add/remove files, or combine with previous commit).
+# Example:
+git commit --amend -m "Updated commit message"
+# Amend the last commit without changing the message (useful for adding forgotten files).
+# Example:
+git commit --amend --no-edit
+# Create an empty commit (useful for triggering CI/CD or marking a point).
+# Example:
+git commit --allow-empty -m "Empty commit for CI trigger"
+# Commit without running pre-commit hooks.
+# Example:
+git commit --no-verify -m "Commit skipping hooks"
+
+# Remove a file from the working directory and stage the removal.
+# Example:
+git rm old_file.txt
+# Remove a file only from the staging area, keeping it in the working directory.
+# Example:
+git rm --cached accidentally_added.log
+
+# Move or rename a file, and stage the change.
+# Example:
+git mv old_name.txt new_name.txt
+
+# --- Viewing History and Differences ---
+# Show commit history.
+# Show all commits:
+# Example:
+git log
+# Show a summarized log with one line per commit:
+# Example:
+git log --oneline
+# Show a graph of branches and merges:
+# Example:
+git log --graph --oneline --all
+# Show commit history with patch (diff) for each commit:
+# Example:
+git log -p
+# Show commit history by author:
+# Example:
+git log --author="Your Name"
+# Show commit history for a specific file:
+# Example:
+git log -- path/to/file.txt
+# Show N most recent commits:
+# Example:
+git log -n 5
+
+# Show differences between commits, branches, or working directory and staging area.
+# Show changes not yet staged (working directory vs. staging area):
+# Example:
+git diff
+# Show changes between staging area and last commit:
+# Example:
+git diff --staged
+# Show changes between two commits:
+# Example:
+git diff HEAD~1 HEAD
+# Show changes between two branches:
+# Example:
+git diff branchA branchB
+# Show changes between a commit and the working directory:
+# Example:
+git diff <commit-hash>
+# Show differences for a specific file:
+# Example:
+git diff file.txt
+
+# Show details of a specific commit (metadata and diff).
+# Example:
+git show <commit-hash>
+git show HEAD
+
+# Show who last modified each line of a file.
+# Example:
+git blame file.txt
+
+# --- Undoing Changes ---
+# Unstage a file (move it from staging area back to working directory).
+# Example:
+git reset HEAD file.txt
+# Restore a file from the staging area to the working directory (newer alternative to `git checkout --`).
+# Example:
+git restore file.txt
+# Restore a file from the last commit to the working directory (discards local changes).
+# Example:
+git restore --source=HEAD file.txt
+# Restore a file from the last commit to the staging area.
+# Example:
+git restore --staged file.txt
+
+# Revert a commit (creates a new commit that undoes the changes of a previous commit).
+# Example:
+git revert <commit-hash>
+# Revert a commit without creating a new commit immediately (adds changes to working directory).
+# Example:
+git revert --no-commit <commit-hash>
+
+# Reset the current branch to a specific commit.
+# Soft reset (moves HEAD, keeps changes in staging area and working directory):
+# Example:
+git reset --soft <commit-hash>
+# Mixed reset (default, moves HEAD, unstages changes but keeps them in working directory):
+# Example:
+git reset --mixed <commit-hash>
+# Hard reset (moves HEAD, discards all changes in staging area and working directory - be very careful!):
+# Example:
+git reset --hard <commit-hash>
+# Reset to the previous state of HEAD (undoes the last commit, changes remain in working directory).
+# Example:
+git reset HEAD~1
+
+# --- Branching ---
+# List all local branches.
+# Example:
+git branch
+# List all local and remote branches.
+# Example:
+git branch -a
+# List branches that have been merged into the current branch.
+# Example:
+git branch --merged
+# List branches that have NOT been merged into the current branch.
+# Example:
+git branch --no-merged
+
+# Create a new branch.
+# Example:
+git branch new-feature
+
+# Switch to an existing branch.
+# Example:
+git checkout new-feature
+# (Modern alternative to `git checkout` for switching branches)
+# Example:
+git switch new-feature
+
+# Create a new branch and switch to it immediately.
+# Example:
+git checkout -b new-feature-and-switch
+# (Modern alternative to `git checkout -b`)
+# Example:
+git switch -c new-feature-and-switch
+
+# Delete a branch (only if it's merged).
+# Example:
+git branch -d old-branch
+# Force delete a branch (even if not merged, use with caution!).
+# Example:
+git branch -D unmerged-branch
+
+# Rename the current branch.
+# Example:
+git branch -m new-branch-name
+# Rename a specific branch.
+# Example:
+git branch -m old-branch-name new-branch-name
+
+# Set the upstream branch for the current local branch (useful for `git pull` and `git push` without arguments).
+# Example:
+git branch --set-upstream-to=origin/main
+
+# --- Merging ---
+# Merge changes from one branch into the current branch.
+# Example:
+git merge feature-branch
+# Merge without fast-forwarding (always creates a merge commit, even if fast-forward is possible).
+# Example:
+git merge --no-ff feature-branch
+# Squash commits from a feature branch into a single commit on the current branch.
+# Example:
+git merge --squash feature-branch
+# Abort a merge in case of conflicts.
+# Example:
+git merge --abort
+
+# --- Rebasing ---
+# Reapply commits from one branch onto another base branch. This rewrites history.
+# Example:
+git rebase main
+# Abort a rebase in case of conflicts.
+# Example:
+git rebase --abort
+# Continue a rebase after resolving conflicts.
+# Example:
+git rebase --continue
+# Skip the current commit during an interactive rebase.
+# Example:
+git rebase --skip
+# Interactive rebase: Allows you to reorder, squash, edit, or drop commits.
+# Example:
+git rebase -i HEAD~5 (interactively rebase the last 5 commits)
+
+# --- Cherry-picking ---
+# Apply the changes introduced by some existing commits on some branch to the current branch.
+# Example:
+git cherry-pick <commit-hash>
+# Cherry-pick multiple commits:
+# Example:
+git cherry-pick <commit-hash-1> <commit-hash-2>
+# Cherry-pick a range of commits (exclusive..inclusive):
+# Example:
+git cherry-pick A..B
+
+# --- Remote Repositories ---
+# List remote repositories.
+# Example:
+git remote -v
+# Add a new remote repository.
+# Example:
+git remote add origin https://github.com/user/repo.git
+# Fetch changes from a remote repository (does not merge into current branch).
+# Example:
+git fetch origin
+# Pull changes from a remote repository (fetch and merge current branch).
+# Example:
+git pull origin main
+# Push changes to a remote repository.
+# Push current branch to remote:
+# Example:
+git push origin main
+# Set upstream for the first push (links local branch to remote branch).
+# Example:
+git push -u origin main
+# Force push (overwrites remote history - use with extreme caution!).
+# Example:
+git push --force origin main
+# Force push with lease (safer force push, prevents overwriting if remote has new commits).
+# Example:
+git push --force-with-lease origin main
+# Remove a remote.
+# Example:
+git remote rm origin
+# Rename a remote.
+# Example:
+git remote rename old-origin new-origin
+# Show information about a remote.
+# Example:
+git remote show origin
+
+# --- Stashing ---
+# Temporarily save changes that are not ready to be committed.
+# Stash current changes (tracked files and staged changes).
+# Example:
+git stash
+# Stash with a message:
+# Example:
+git stash save "Work in progress on login"
+# Stash including untracked files:
+# Example:
+git stash -u
+# Stash including untracked and ignored files:
+# Example:
+git stash -a
+
+# List all stashes.
+# Example:
+git stash list
+
+# Apply the most recent stash and keep it in the stash list.
+# Example:
+git stash apply
+# Apply a specific stash:
+# Example:
+git stash apply stash@{1}
+
+# Apply the most recent stash and remove it from the stash list.
+# Example:
+git stash pop
+
+# Delete a specific stash.
+# Example:
+git stash drop stash@{1}
+# Delete all stashes.
+# Example:
+git stash clear
+
+# Show the diff of a stash.
+# Example:
+git stash show
+# Show the diff of a specific stash with patch format.
+# Example:
+git stash show -p stash@{1}
+
+# --- Tagging ---
+# Create a lightweight tag.
+# Example:
+git tag v1.0.0
+# Create an annotated tag (recommended, includes message and author info).
+# Example:
+git tag -a v1.0.0 -m "Release version 1.0.0"
+
+# List all tags.
+# Example:
+git tag
+# List tags matching a pattern:
+# Example:
+git tag -l "v1.*"
+
+# Push tags to the remote repository.
+# Example:
+git push origin --tags
+# Push a specific tag:
+# Example:
+git push origin v1.0.0
+
+# Delete a local tag.
+# Example:
+git tag -d v1.0.0
+# Delete a remote tag.
+# Example:
+git push origin --delete v1.0.0
+
+# --- Cleaning the Working Directory ---
+# Remove untracked files from the working directory.
+# Show what would be removed without actually removing:
+# Example:
+git clean -n
+# Remove untracked files:
+# Example:
+git clean -f
+# Remove untracked files and untracked directories:
+# Example:
+git clean -fd
+
+# --- Ignoring Files ---
+# Create or edit a .gitignore file to specify intentionally untracked files to ignore.
+# Example content for .gitignore:
+# # Ignore all .log files
+# *.log
+# # Ignore the 'node_modules' directory
+# node_modules/
+# # Ignore a specific file
+# mysecret.txt
+# # Ignore all files with a .tmp extension in any directory
+# **/*.tmp
+# # Ignore a specific directory, but not its contents
+# /build/
+# # Exclude a file that would otherwise be ignored by a pattern
+# !important.log
+
+# --- Reflog (Reference Logs) ---
+# Show a log of where HEAD and other references have been. This is a powerful safety net.
+# Example:
+git reflog
+# Show reflog with full commit messages:
+# Example:
+git reflog show
+
+# --- Aliases ---
+# Create shortcuts for frequently used Git commands.
+# Example (global alias):
+git config --global alias.co checkout
+git config --global alias.br branch
+git config --global alias.ci commit
+git config --global alias.st status
+# Example (complex alias):
+git config --global alias.lg "log --graph --oneline --decorate --all"
+
+# --- Bisect (Debugging) ---
+# Find the commit that introduced a bug using a binary search.
+# Start a bisect session:
+# Example:
+git bisect start
+# Mark the current commit as bad (contains the bug):
+# Example:
+git bisect bad
+# Mark a known good commit (before the bug existed):
+# Example:
+git bisect good <good-commit-hash>
+# Reset the bisect session and return to the original branch:
+# Example:
+git bisect reset
+
+# --- Worktree (Advanced) ---
+# Manage multiple working trees attached to the same repository. Allows working on multiple branches simultaneously.
+# Add a new worktree for a branch:
+# Example:
+git worktree add -b new-feature ../new-feature-worktree
+# List existing worktrees:
+# Example:
+git worktree list
+# Remove a worktree:
+# Example:
+git worktree remove ../old-feature-worktree
+# Prune stale worktree entries:
+# Example:
+git worktree prune
