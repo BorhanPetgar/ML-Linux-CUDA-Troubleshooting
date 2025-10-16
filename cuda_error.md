@@ -7,3 +7,8 @@ ImportError: libcusparseLt.so.0: cannot open shared object file: No such file or
 Install `cusparselt` from this [link](https://developer.nvidia.com/cusparselt-downloads) 
 
 ---
+### How to find CUDA?
+
+```bash
+sudo find / -name "libcudart.so.*" 2>/dev/null
+```
