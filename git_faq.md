@@ -259,3 +259,24 @@ Rebasing rewrites the commit history of the source branch (`feature`) so that it
 
 Choosing the right merge strategy depends on your team's workflow, the desired history structure, and whether the commits have been shared.
 
+# Permission denied even when you are contributor!
+### Error:
+```bash
+git fetch origin
+git@github.com: Permission denied (publickey).
+fatal: Could not read from remote repository.
+
+Please make sure you have the correct access rights
+and the repository exists.
+```
+### Solution
+```bash
+eval "$(ssh-agent -s)"
+```
+then
+```bash
+ssh-add ~/.ssh/borhan
+```
+Enter your password and it will be alright! 
+
+
